@@ -10,19 +10,18 @@ import { Role } from 'src/enums/role.enum';
 import { RoleGuard } from 'src/guards/role.guard';
 import { AuthGuard } from 'src/guards/auth.guard';
 
+@Roles(Role.Admin)
 @UseGuards(AuthGuard, RoleGuard)
 @UseInterceptors(LogInterceptor)
 @Controller('users')
 export class UserController {
     constructor(private readonly userService: UserService) {}
 
-    @Roles(Role.Admin)
     @Post()
     async create(@Body() data: CreateUserDTO){
         return this.userService.create(data);
     }
     
-    @Roles(Role.Admin)
     @Get()
     async show(){
         return this.userService.show();
@@ -33,18 +32,15 @@ export class UserController {
         return this.userService.showOne(id);
     }
     
-    @Roles(Role.Admin)
     @Put(':id')
     async update(@Body() data: UpdatePutUserDTO, @ParamId() id: number) {
         this.userService.update(id , data)
     }
     
-    @Roles(Role.Admin)
     @Patch(':id')
     async updatePartial(@Body() data: UpdatePatchUserDTO, @ParamId() id: number) {
         this.userService.updatePartial(id , data)
     }
-    
     @Roles(Role.Admin)
     @Delete(':id')
     async delete(@ParamId() id: number) {
