@@ -57,12 +57,15 @@ export class AuthService {
         const user = await this.prisma.users.findFirst({
             where: {
                 email,
-                password
             }
         })
 
         if (!user) {
             throw new UnauthorizedException('E-mail e/ou senha incorretos.');
+        }
+
+        if(!await  bcrypt.compare(password, user.password)) {
+            throw new UnauthorizedException('E-mail e/ou senha incorretos');
         }
 
         return this.createToken(user);
